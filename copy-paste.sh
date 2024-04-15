@@ -1,7 +1,9 @@
-wl-paste  -t TEXT > .tmp.sql
-pup -f ./.tmp.sql -p '.ace_content' text{} > .tmp2.sql
-#cat .tmp2.sql |  sed 's/&gt\;/>/' | sed 's/&lt\;/</' | sed "s/&#39/\'/" > .tmp3.sql
-sqlformat .tmp2.sql --reindent --keywords upper > .tmp3.sql
+wl-paste > .tmp
+pup -f ./.tmp -p '.ace_content' text{} > .tmp2.sql
+npx sql-formatter .tmp2.sql > .tmp3.sql
+#sed $'s/[^[:print:]\t]//g' .tmp3.sql > .tmp4.sql
+cat .tmp4.sql | tr '\n' '`' | sed 's/`/\ \n/g' > .tmp5.sql
+#cat ./.tmp5.sql
 echo "Debug: 2s"
 sleep 2
-ydotool type -f .tmp3.sql
+ydotool type -d 10 -f .tmp5.sql
